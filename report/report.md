@@ -62,7 +62,7 @@ We can observe on the figure below that:
 
 
 
-![Figure 1](/Users/alexandre/development/school/DAC/tadonki/report/Figure 1.png)
+![Figure 1](./Figure 1.png)
 
 Relative speedup, compared to the *naive* approach ( `nb_threads = -1` means no multithreading):
 
@@ -87,7 +87,7 @@ We also ran experiments with various values for `nb_threads` :
 
 We observe that creating and using the threads adds an overhead that can be quite significant when `n` is small (an order of magnitude or more). However, as expected, multi-threading does speed up the program for larger values of `n`.
 
-![Figure 2](/Users/alexandre/development/school/DAC/tadonki/report/Figure 2.png)
+![Figure 2](./Figure 2.png)
 
 ## Remarks on the precision
 
@@ -99,7 +99,7 @@ This issue can be prevented using double variables to store the sum (like in the
 
 Finally, our recursive approach **rec** using only float variables does fix the precision issue, and is similar to the **double** approach. Instead of summing the small $u_i$ to a single `sum` variable that keeps getting larger, the recursive approach sums the $u_i$ between them progressively in order to always add numbers of the same order of magnitude.
 
-![Figure 3](/Users/alexandre/development/school/DAC/tadonki/report/Figure 3.png)
+![Figure 3](./Figure 3.png)
 
 ## References
 
