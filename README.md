@@ -6,4 +6,4 @@ We implemented `multi-threading` and `vectorized` computations with the `AVX` in
 
 # How to compile
 
-run the command `gcc -o project project.c -mavx -lpthread -lm -Wall`
+run the command `gcc -o project project.c -mavx2 -lpthread -lm -Wall`
