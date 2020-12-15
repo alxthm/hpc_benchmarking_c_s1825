@@ -106,12 +106,14 @@ float norm_vec(float* U, int n) {
   int m = n / 8;
 
   __m256 sum = _mm256_set1_ps(-0.f); // sign bit to 1, all others to 0
-  __m256 signmask = _mm256_set1_ps(0.f);
-  for (int i = 0; i < m; i++) {
+  __m256i minus1_256 = _mm256_set1_epi32(-1);
+  __m256 absmask_256 = _mm256_castsi256_ps(_mm256_srli_epi32(minus1_256, 1));
+  //__m256 signmask = _mm256_set1_ps(0.f);
+    for (int i = 0; i < m; i++) {
     __m256 u = _mm256_load_ps(&U[8*i]);
     // this changes the sign bit of u to 0, i.e. makes it a positive number
     // while keeping the others to the original value
-    u = _mm256_andnot_ps(signmask, u);
+    u = _mm256_and_ps(absmask_256, u);
     u = _mm256_sqrt_ps(u);
     sum = _mm256_add_ps(sum, u);
   }
