@@ -105,15 +105,18 @@ float norm_vec(float* U, int n) {
   // number of operations (assume n is a multiple of 8)
   int m = n / 8;
 
-  __m256 sum = _mm256_set1_ps(-0.f); // sign bit to 1, all others to 0
-  __m256i minus1_256 = _mm256_set1_epi32(-1);
-  __m256 absmask_256 = _mm256_castsi256_ps(_mm256_srli_epi32(minus1_256, 1));
-  //__m256 signmask = _mm256_set1_ps(0.f);
+  // Alternative approach to our signmask:
+  // __m256i minus1_256 = _mm256_set1_epi32(-1);
+  // __m256 absmask_256 = _mm256_castsi256_ps(_mm256_srli_epi32(minus1_256, 1));
+  // u = _mm256_and_ps(absmask_256, u);
+
+  __m256 sum = _mm256_set1_ps(0.f);
+  __m256 signmask = _mm256_set1_ps(-0.f); // sign bit to 1, all others to 0
     for (int i = 0; i < m; i++) {
     __m256 u = _mm256_load_ps(&U[8*i]);
     // this changes the sign bit of u to 0, i.e. makes it a positive number
     // while keeping the others to the original value
-    u = _mm256_and_ps(absmask_256, u);
+    u = _mm256_andnot_ps(signmask, u);
     u = _mm256_sqrt_ps(u);
     sum = _mm256_add_ps(sum, u);
   }
@@ -243,8 +246,8 @@ int main(int argc, char const **argv) {
   // vectorized function
   // float* U = (float*) malloc(n * sizeof(float));
   for (int i = 0; i < n; i++)
-    // random float between 0 and 1
-    U[i] = (float)rand() / RAND_MAX;
+    // random float between -1 and 1
+    U[i] = (2 * (float)rand() / RAND_MAX) - 1.f;
 
   // Save U so we can run experiments in python on the same data
   // write_to_file(U, n);
